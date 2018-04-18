@@ -1,4 +1,4 @@
-import java.util.Objects;
+package com.yet.spring.core.beans;
 
 public class Client {
 
