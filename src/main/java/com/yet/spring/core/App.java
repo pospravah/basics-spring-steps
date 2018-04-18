@@ -2,20 +2,36 @@ package com.yet.spring.core;
 
 import com.yet.spring.core.beans.Client;
 import com.yet.spring.core.loggers.ConsoleEventLogger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 
 public class App {
 
-    private Client client;
+    public App() {
+    }
+
+
     private ConsoleEventLogger eventLogger;
+    private Client client;
 
     public static void main(String[] args) {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+        App app = (App) ctx.getBean("app");
+        app.logEvent("Some event for 1 app");
+        app.logEvent("Some event for 2 app");
 
-        App app = new App();
 
-        app.client = new Client(1, "John Smith");
-        app.eventLogger = new ConsoleEventLogger();
+//        App app = new App();
+//        app.client = new Client(1, "John Smith");
+//        app.eventLogger = new ConsoleEventLogger();
+//
+    }
 
-        app.logEvent("Some event from user 1 app");
+    public App(Client client, ConsoleEventLogger eventLogger) {
+        super();
+        this.client = client;
+        this.eventLogger = eventLogger;
     }
 
     private void logEvent(String msg) {
