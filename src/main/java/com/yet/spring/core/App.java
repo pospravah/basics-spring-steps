@@ -12,20 +12,28 @@ public class App {
     public App() {
     }
 
-
     private ConsoleEventLogger eventLogger;
     private Client client;
 
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
         App app = (App) ctx.getBean("app");
-        app.logEvent("Some event for 1 app");
-        app.logEvent("Some event for 2 app");
 
-//        App app = new App();
-//        app.client = new Client(1, "John Smith");
-//        app.eventLogger = new ConsoleEventLogger();
-//
+        Event event = ctx.getBean(Event.class);
+        app.logEvent(event, "Some event for 1 app");
+
+        event = ctx.getBean(Event.class);
+        app.logEvent(event, "Some event for 2 app");
+
+        event = ctx.getBean(Event.class);
+        app.logEvent(event, "Some event for 3 app");
+
+        event = ctx.getBean(Event.class);
+        app.logEvent(event, "Some event for 4 app");
+
+        event = ctx.getBean(Event.class);
+        app.logEvent(event, "Some event for 5 app");
+
     }
 
 
@@ -35,10 +43,9 @@ public class App {
         this.eventLogger = eventLogger;
     }
 
-    private void logEvent(String msg) {
-        String message = msg.replaceAll(
-                Integer.toString(client.getId()), client.getFullName() );
-                Event evt = new Event(message);
+    private void logEvent(Event evt, String msg) {
+                String message = msg.replaceAll(Integer.toString(client.getId()), client.getFullName());
+                evt.setMsg(message);
                 eventLogger.logEvent(evt);
     }
 
