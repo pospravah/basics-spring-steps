@@ -1,6 +1,7 @@
 package com.yet.spring.core;
 
 import com.yet.spring.core.beans.Client;
+import com.yet.spring.core.beans.Event;
 import com.yet.spring.core.loggers.ConsoleEventLogger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -21,12 +22,12 @@ public class App {
         app.logEvent("Some event for 1 app");
         app.logEvent("Some event for 2 app");
 
-
 //        App app = new App();
 //        app.client = new Client(1, "John Smith");
 //        app.eventLogger = new ConsoleEventLogger();
 //
     }
+
 
     public App(Client client, ConsoleEventLogger eventLogger) {
         super();
@@ -37,6 +38,8 @@ public class App {
     private void logEvent(String msg) {
         String message = msg.replaceAll(
                 Integer.toString(client.getId()), client.getFullName() );
-                eventLogger.logEvent(message);
+                Event evt = new Event(message);
+                eventLogger.logEvent(evt);
     }
+
 }
