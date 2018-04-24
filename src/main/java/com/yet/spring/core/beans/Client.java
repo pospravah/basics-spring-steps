@@ -4,11 +4,21 @@ public class Client {
 
     private int id;
     private String fullName;
+    private String greeting;
+
+    public String getGreeting() {
+        return greeting;
+    }
+
+    public void setGeeting(String gr){
+        this.greeting = gr;
+    }
 
     public Client(int id, String fullName) {
         this.id = id;
         this.fullName = fullName;
     }
+
 
     public int getId() {
         return id;
