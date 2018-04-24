@@ -1,0 +1,2 @@
+Log message: Event{id=3, date=Apr 24, 2018 5:33:16 PM, msg='Some event for Paul app'}
+Log message: Event{id=5, date=Apr 24, 2018 5:33:16 PM, msg='Some event for 5 app'}

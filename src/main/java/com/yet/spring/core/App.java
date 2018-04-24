@@ -6,58 +6,63 @@ import com.yet.spring.core.beans.EventType;
 import com.yet.spring.core.loggers.CacheFileEventLogger;
 import com.yet.spring.core.loggers.ConsoleEventLogger;
 import com.yet.spring.core.loggers.EventLogger;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Map;
-
 
 public class App {
 
     public App() {
     }
 
-    private EventLogger eventLogger;
+    private EventLogger defaultLogger;
+
     private Client client;
+
     private Map<EventType, EventLogger> loggers;
 
     public static void main(String[] args) {
-//        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
         ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
         App app = (App) ctx.getBean("app");
 
         Event event = ctx.getBean(Event.class);
-        app.logEvent(event, "Some event for 1 app");
+        app.logEvent(EventType.INFO, event, "Some event for 1 app");
 
         event = ctx.getBean(Event.class);
-        app.logEvent(event, "Some event for 2 app");
+        app.logEvent(EventType.INFO, event, "Some event for 2 app");
 
         event = ctx.getBean(Event.class);
-        app.logEvent(event, "Some event for 3 app");
+        app.logEvent(EventType.ERROR,event, "Some event for 3 app");
 
         event = ctx.getBean(Event.class);
-        app.logEvent(event, "Some event for 4 app");
+        app.logEvent(EventType.INFO, event, "Some event for 4 app");
 
         event = ctx.getBean(Event.class);
-        app.logEvent(event, "Some event for 5 app");
+        app.logEvent(EventType.ERROR , event, "Some event for 5 app");
 
         ctx.close();
 
     }
 
 
-    public App(Client client, EventLogger eventLogger, Map<EventType, EventLogger> loggers) {
+    public App(Client client, EventLogger defaultLogger, Map<EventType, EventLogger> loggers) {
         super();
         this.client = client;
-        this.eventLogger = eventLogger;
+        this.defaultLogger = defaultLogger;
         this.loggers = loggers;
     }
 
-    private void logEvent(Event evt, String msg) {
+    private void logEvent(EventType eventType, Event evt, String msg) {
                 String message = msg.replaceAll(Integer.toString(client.getId()), client.getFullName());
                 evt.setMsg(message);
-                eventLogger.logEvent(evt);
+
+                EventLogger logger = loggers.get(eventType);
+                if (logger == null) {
+                    logger = defaultLogger;
+
+                }
+            logger.logEvent(evt);
     }
 
 }
